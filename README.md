@@ -15,3 +15,5 @@ WeChatStock: talk about stock with wechat
 # Others
 
 - [wxpy](https://wxpy.readthedocs.io/zh/latest/index.html)
+
+- [腾迅股票数据接口](http://www.cnblogs.com/skating/p/6424342.html)
