@@ -33,14 +33,22 @@ def main():
     bot = wx.Bot(cache_path= "wxpy.pkl", console_qr=True)
     bot.enable_puid(path='wxpy_puid.pkl')
 
-    admin_friend_cmd = os.path.join(top_path, "src", "reply", "admin_friend.py")
-    stock_group_cmd = os.path.join(top_path, "src", "reply", "stock_group.py")
-
-    admin_friend = bot.friends(update=True).search('大地小神')[0]
-    print("大地小神PUID:%s" % admin_friend)
+    print(bot.friends())
+    admin_friend = None
+    admin_friend_t = bot.friends(update=True).search('大地小神')
+    while not admin_friend_t :
+        time.sleep(3)
+        print("again")
+        admin_friend_t = bot.friends(update=True).search('大地小神')
+    admin_friend = admin_friend_t[0]
+    print("大地小神PUID:%s" % admin_friend.puid)
 
     stock_group = bot.groups(update=True).search('三眼天机')[0]
+    print(stock_group())
     print("三眼天机PUID:%s" % stock_group.puid)
+
+    admin_friend_cmd = os.path.join(top_path, "src", "reply", "admin_friend.py")
+    stock_group_cmd = os.path.join(top_path, "src", "reply", "stock_group.py")
 
     @bot.register(chats=[stock_group], msg_types=[wx.TEXT], except_self=False)
     def auto_reply_stock_group(msg):
