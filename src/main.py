@@ -20,6 +20,7 @@ watch_stocks = {}
 watch_stocks_last = {}
 
 sleep_time = 5
+quit = 0
 
 def main():
     print("current work dir path: %s" % os.getcwd())
@@ -71,9 +72,17 @@ def main():
     @bot.register(chats=[admin_friend], msg_types=[wx.TEXT], except_self=False)
     def auto_reply_admin_friend(msg):
         global sleep_time
+        global quit
         txt = msg.text.lower()
         if txt[0] == "s":
             sleep_time = int(txt[1:])
+            return
+        elif txt[0] == "q":
+            quit = 1
+            return
+        elif txt[0] == "r":
+            quit = 0
+            return
         #  if not msg.is_at:
             #  return;
         cmd = '{} {} {}'.format(admin_friend_cmd, top_path, txt)
@@ -83,8 +92,9 @@ def main():
         return stdout_data.decode("gbk")
 
     while True:
-        hour = int(time.strftime('%d', time.localtime(time.time())))
-        if hour < 9 or hour > 15:
+        hour = int(time.strftime('%H', time.localtime(time.time())))
+        if quit == 1 or hour < 9 or hour > 15:
+            print(time.strftime('%y:%m:%d-%H:%M:%S', time.localtime(time.time())))
             time.sleep(10)
             continue
         try:
