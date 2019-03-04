@@ -27,12 +27,15 @@ def urlTolist(url):
     
 allCodelist = urlTolist(stock_CodeUrl)
 
+print(len(allCodelist))
+
 for code in allCodelist:
     print('code: %s'%code)
     if code[0]=='6':
         url = 'http://quotes.money.163.com/service/chddata.html?code=0'+code+\
-        '&end=20161231&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+        '&start=20150101&end=20190304&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
     else:
         url = 'http://quotes.money.163.com/service/chddata.html?code=1'+code+\
-        '&end=20161231&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
-    urllib.request.urlretrieve(url,'/home/lidong/Downloads/'+code+'.csv')  # , reporthook=downback
+        '&start=20150101&end=20190304&fields=TCLOSE;HIGH;LOW;TOPEN;LCLOSE;CHG;PCHG;TURNOVER;VOTURNOVER;VATURNOVER;TCAP;MCAP'
+    urllib.request.urlretrieve(url,'./'+code+'.csv')  # , reporthook=downback
+    break
