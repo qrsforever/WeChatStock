@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS `profile`;
 
 CREATE TABLE `profile` (
     `code` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-    `name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+    `name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin,
     `issue_price` int(11),
     `time_market` date,
     PRIMARY KEY (`code`)
