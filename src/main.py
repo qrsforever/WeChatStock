@@ -7,18 +7,6 @@ import urllib.request
 
 import wxpy as wx
 
-# 最新行情
-query_latest = "http://qt.gtimg.cn/q="
-
-# 实时资金流向
-query_money_flow = "http://qt.gtimg.cn/q=ff_"
-
-# 盘口分析
-query_dish = "http://qt.gtimg.cn/q=s_pk"
-
-watch_stocks = {}
-watch_stocks_last = {}
-
 sleep_time = 5
 quit = 0
 
