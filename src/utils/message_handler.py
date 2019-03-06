@@ -3,7 +3,7 @@
 
 __all__ = ['MessageHandler']
 
-from message import Message
+from .message import Message
 
 class MessageHandler(object):
 
@@ -13,7 +13,6 @@ class MessageHandler(object):
         self.message_queue = queue
 
     def send_message(self, what, **args):
-        print(type(args), args)
         msg = Message.obtain(self, what, args)
         self.message_queue.enqueue_message(msg)
 

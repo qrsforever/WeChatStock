@@ -51,6 +51,17 @@ def update_stock_history():
 
 if __name__ == "__main__":
     try:
-        update_stock_history()
+        #  update_stock_history()
+        skdb = db.connect_db()
+        cursor = skdb.cursor()
+        sql = "select code, name from profile where code='{}' or name like '%%{}%%'"
+        try:
+            cursor.execute(sql.format('贵州茅台', '贵州茅台'))
+            results = cursor.fetchall()
+            for row in results:
+                print(row[0], row[1])
+        except Exception as e:
+            print("error:", e)
+        skdb.close()
     except Exception as e:
         print("Exception:", e)

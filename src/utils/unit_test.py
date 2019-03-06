@@ -16,7 +16,7 @@ class OneMessageHandler(MessageHandler):
         MessageHandler.__init__(self, queue)
 
     def handle_message(self, msg):
-        print("Another handle_message")
+        print("One handle_message: ", msg)
         pass
 
 class AnotherMessageHandler(MessageHandler):
@@ -24,13 +24,13 @@ class AnotherMessageHandler(MessageHandler):
         MessageHandler.__init__(self, queue)
 
     def handle_message(self, msg):
-        print("Another handle_message")
+        print("Another handle_message: ", msg)
         pass
 
 def dispatch_message(queue):
     while True:
         msg = queue.next()
-        print(msg)
+        msg.handler.handle_message(msg)
 
 def send_message_process():
     print("process:{}".format(os.getpid()))
@@ -38,7 +38,7 @@ def send_message_process():
     time.sleep(3)
     handler2.send_message(2, c='c', d='d')
 
-def unit_test_utils():
+if __name__ == "__main__":
     queue = MessageQueue()
     handler1 = OneMessageHandler(queue)
     handler2 = AnotherMessageHandler(queue)
@@ -49,6 +49,3 @@ def unit_test_utils():
     print("process:{}".format(os.getpid()))
     dispatch_message(queue)
 
-
-if __name__ == "__main__":
-    unit_test_utils()
