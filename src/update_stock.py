@@ -3,7 +3,7 @@
 
 import os, time
 import database as db
-import download as dd
+from request import tencent_request as tquery
 
 from configparser import ConfigParser
 
@@ -29,7 +29,7 @@ def update_stock_history():
     count = cf.getint(STOCK_COMM_FIELD, "stock_count")
 
     # Get stock list
-    stock_list = dd.request_stock_list()
+    stock_list = tquery.request_stock_list()
     length = len(stock_list)
     print("from {} to {} stock count: {} vs {}".format(start, end, count, length))
     if count != length:
@@ -48,20 +48,41 @@ def update_stock_history():
         cf.set(STOCK_COMM_FIELD, "stock_count", str(length))
         cf.write(open(file, "w"))
 
+def query_all_stock():
+    skdb = db.connect_db()
+    cursor = skdb.cursor()
+    sql = "select code, name from profile where code='{}' or name like '%%{}%%'"
+    try:
+        cursor.execute(sql.format('贵州茅台', '贵州茅台'))
+        results = cursor.fetchall()
+        for row in results:
+            print(row[0], row[1])
+    except Exception as e:
+        print("error:", e)
+    skdb.close()
+
+def update_latest_quotation():
+    skdb = db.connect_db()
+    cursor = skdb.cursor()
+    sql = "select code from profile"
+
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        for row in results:
+            print("row[0]:", row[0])
+            print(tquery.request_latest_quotation(row[0]))
+            break
+
+    except Exception as e:
+        print("error:", e)
+    skdb.close()
+
 
 if __name__ == "__main__":
     try:
-        #  update_stock_history()
-        skdb = db.connect_db()
-        cursor = skdb.cursor()
-        sql = "select code, name from profile where code='{}' or name like '%%{}%%'"
-        try:
-            cursor.execute(sql.format('贵州茅台', '贵州茅台'))
-            results = cursor.fetchall()
-            for row in results:
-                print(row[0], row[1])
-        except Exception as e:
-            print("error:", e)
-        skdb.close()
+        # update_stock_history()
+        # query_all_stock()
+        update_latest_quotation()
     except Exception as e:
         print("Exception:", e)

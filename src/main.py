@@ -4,7 +4,7 @@
 import os, sys, time
 from utils import *
 import database as db
-import download as dd
+from request import tencent_request as tquery
 import wxpy as wx
 import cmd_prompt
 
@@ -13,7 +13,7 @@ cache_path = os.path.join(top_path, "cache")
 queue = message_queue.MessageQueue()
 
 class Global:
-    timeout_s = 15
+    timeout_s = 60
     active_chats = {}
 
 
@@ -70,17 +70,30 @@ def init_wx_app():
                     chat_info["until_time"] = curtime + Global.timeout_s
                     return cmd_prompt.query_str.format(msg.member.name)
             elif cmd == "eee1":
+                if txt == "1" or txt == "2":
+                    sql = "select code, name from profile where code='{}' or name like '%%{}%%'"
+                    skdb = db.connect_db()
+                    cursor = skdb.cursor()
+                    try:
+                        cursor.execute(sql.format(txt, txt))
+                        result = cursor.fetchone()
+                        if result == None:
+                            return
+
+
+                    except:
+                        return cmd_prompt.inner_error_str.format(msg.member.name)
+                    finally:
+                        skdb.close()
                 return cmd_prompt.notimpl_str.format(msg.member.name)
             elif cmd == "eee2":
                 return cmd_prompt.notimpl_str.format(msg.member.name)
             elif cmd == "eee3":
-                if txt == "1":
-                    chat_info["cmd"] = "eee31"
+                if txt == "1" or txt == "2" or txt == "3" or txt == "4":
+                    chat_info["cmd"] = "eee3" + txt
                     chat_info["until_time"] = curtime + Global.timeout_s
                     return cmd_prompt.input_code_or_name.format(msg.member.name)
-                else:
-                    return cmd_prompt.notimpl_str.format(msg.member.name)
-            elif cmd == "eee31":
+            elif cmd == "eee31" or cmd == "eee32" or cmd == "eee33" or cmd == "eee34":
                 sql = "select code, name from profile where code='{}' or name like '%%{}%%'"
                 skdb = db.connect_db()
                 cursor = skdb.cursor()
@@ -90,15 +103,25 @@ def init_wx_app():
                     if result == None:
                         return
                     chat_info["until_time"] = curtime + Global.timeout_s
-                    return cmd_prompt.stock_info_str.format(msg.member.name,
-                            dd.request_brief_info(result[0]))
+                    if cmd[3] == '1':
+                        return cmd_prompt.stock_info_str.format(msg.member.name,
+                                tquery.request_brief_info(result[0]))
+                    elif cmd[3] == '2':
+                        return cmd_prompt.stock_info_str.format(msg.member.name,
+                                 tquery.request_latest_quotation(result[0]))
+                    elif cmd[3] == '3':
+                        return cmd_prompt.stock_info_str.format(msg.member.name,
+                                 tquery.request_money_flow(result[0]))
+                    elif cmd[3] == '4':
+                        return cmd_prompt.stock_info_str.format(msg.member.name,
+                                 tquery.request_dish_mouth(result[0]))
                 except:
                     return cmd_prompt.inner_error_str.format(msg.member.name)
                 finally:
                     skdb.close()
         else:
             # top menu
-            if txt == "eee" or txt == "333":
+            if txt == "eee" or txt == "333" or txt == "三眼天机":
                 chat_info["cmd"] = "eee"
                 chat_info["until_time"] = curtime + Global.timeout_s
                 return cmd_prompt.welcome_str.format(msg.member.name)

@@ -34,6 +34,23 @@ def request_stock_data(codes, start, end):
         data = urllib.request.urlopen(url).read()
         yield data.decode("gbk")
 
+def request_stock_data_by(code, field, start = "20100101", end = "20190101"):
+    URL = "http://quotes.money.163.com/service/chddata.html"
+    FIELDS = ("TCLOSE","HIGH","LOW","TOPEN","LCLOSE","CHG","PCHG","TURNOVER","VOTURNOVER","VATURNOVER","TCAP","MCAP")
+    txt = field.upper()
+    if txt not in FIELDS:
+        return None
+    print(code)
+    url = URL
+    if code[0] == '6':
+        url += "?code=0" + code
+    else:
+        url += "?code=1" + code
+    url += "&start=" + start + "&end=" + end + "&fields=" + txt
+    print(url)
+    data = urllib.request.urlopen(url).read()
+    return data.decode("gbk")
+
 # 获取最新行情
 def request_latest_quotation(code):
     url = tencent_query_url + "/q=" + ("sh" if code[0] == "6" else "sz") + code
@@ -83,12 +100,14 @@ def request_brief_info(code):
     return None
 
 if __name__ == "__main__":
+    code = "600519"
     try:
-        request_stock_list()
+        #  request_stock_list()
+        print (request_stock_data_by(code, "turnover"))
     except Exception as e:
         print("error:", e)
-    #  print(request_latest_quotation("600519"))
-    #  print(request_money_flow("600519"))
-    #  print(request_dish_mouth("600519"))
-    #  print(request_brief_info("600519"))
+    #  print(request_latest_quotation(code))
+    #  print(request_money_flow(code))
+    #  print(request_dish_mouth(code))
+    #  print(request_brief_info(code))
 
