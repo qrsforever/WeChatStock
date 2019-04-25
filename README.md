@@ -36,7 +36,7 @@ MCAP      |  流通市值
 
 ## 最新行情
 
-`http://qt.gtimg.cn/q=s_sh600519`
+`http://qt.gtimg.cn/q=sh600519`
 
 ```
  0: 未知
@@ -78,7 +78,7 @@ MCAP      |  流通市值
 
 ## 实时资金流向
 
-`http://qt.gtimg.cn/q=s_sh600519`
+`http://qt.gtimg.cn/q=ff_sh600519`
 
 ```
  0: 股票代码

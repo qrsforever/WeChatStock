@@ -12,11 +12,12 @@ CREATE TABLE `profile` (
 
 -- Table: histroy info per day
 
-DROP TABLE IF EXISTS `histroy_day`;
+DROP TABLE IF EXISTS `optional`;
 
-CREATE TABLE `histroy_day` (
+CREATE TABLE `optional` (
     `day` date NOT NULL,
     `code` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+    `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin,
     `tclose` float(12, 2),
     `high` float(12, 2),
     `low` float(12, 2),
@@ -31,4 +32,3 @@ CREATE TABLE `histroy_day` (
     `mcap` float(12, 2),
     PRIMARY KEY (`day`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
